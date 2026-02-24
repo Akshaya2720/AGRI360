@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join Agri360 | Kerala State Onboarding</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .role-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 4rem;
+        }
+
+        @media (min-width: 768px) {
+            .role-grid {
+                grid-template-columns: repeat(5, 1fr);
+            }
+        }
+
+        .role-card {
+            background: white;
+            border: 1px solid var(--border);
+            padding: 2.5rem 1.5rem;
+            border-radius: var(--radius-3xl);
+            cursor: pointer;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.25rem;
+            text-align: center;
+        }
+
+        .role-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--primary);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .role-card.active {
+            background: var(--emerald-50);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 8px rgba(16, 185, 129, 0.05);
+        }
+
+        .role-icon {
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: 18px;
+            color: var(--text-muted);
+            transition: all 0.4s ease;
+        }
+
+        .role-card.active .role-icon {
+            background: var(--primary);
+            color: white;
+        }
+
+        .role-name {
+            font-size: 11px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--text-muted);
+        }
+
+        .role-card.active .role-name {
+            color: var(--primary);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2.5rem;
+        }
+
+        @media (min-width: 640px) {
+            .form-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .form-label {
+            display: block;
+            font-size: 10px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--primary);
+            margin-bottom: 12px;
+            margin-left: 4px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 1.35rem 1.75rem;
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: white;
+            box-shadow: 0 0 0 8px rgba(16, 185, 129, 0.06);
+        }
+
+        .form-section-head {
+            font-size: 11px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.4em;
+            color: var(--text-muted);
+            margin: 5rem 0 2.5rem;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .form-section-head::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        .error-message {
+            background: #fff1f2;
+            color: #e11d48;
+            padding: 1.5rem;
+            border-radius: 20px;
+            font-weight: 800;
+            font-size: 0.85rem;
+            margin-bottom: 3rem;
+            display: none;
+            border: 1px solid #ffe4e6;
+        }
+    </style>
+</head>
+
+<body class="mesh-bg flex items-center justify-center py-32">
+    <div class="container max-w-6xl animate-fade-in">
+        <div class="text-center mb-20">
+            <a href="index.html" class="inline-flex items-center gap-4 mb-12"
+                style="text-decoration: none; color: inherit;">
+                <div style="background: var(--primary); padding: 0.8rem; border-radius: 18px; color: white;">
+                    <i data-lucide="sprout" size="32" stroke-width="2.5"></i>
+                </div>
+                <span class="font-display font-black text-4xl tracking-tighter">Agri<span
+                        class="emerald-600">360</span></span>
+            </a>
+            <h1 class="text-6xl italic font-display mb-6">Join the <span class="emerald-600 NOT-italic">Network.</span>
+            </h1>
+            <p class="text-xl text-gray-500 font-bold tracking-tight">Select your node identity to begin secure
+                onboarding.</p>
+        </div>
+
+        <div class="card-premium glass-morph max-w-5xl mx-auto">
+            <div id="errorBox" class="error-message"></div>
+
+            <form id="signupForm" class="space-y-4">
+                <div class="form-section-head">01 Node Identity</div>
+                <div class="role-grid">
+                    <div class="role-card active" onclick="setRole('FARMER', this)">
+                        <div class="role-icon"><i data-lucide="sprout" size="24"></i></div>
+                        <div class="role-name">Farmer</div>
+                    </div>
+                    <div class="role-card" onclick="setRole('SUPPLYCO_OFFICER', this)">
+                        <div class="role-icon"><i data-lucide="building-2" size="24"></i></div>
+                        <div class="role-name">SupplyCo</div>
+                    </div>
+                    <div class="role-card" onclick="setRole('MILL_OPERATOR', this)">
+                        <div class="role-icon"><i data-lucide="factory" size="24"></i></div>
+                        <div class="role-name">Mill</div>
+                    </div>
+                    <div class="role-card" onclick="setRole('BANK_OFFICER', this)">
+                        <div class="role-icon"><i data-lucide="briefcase" size="24"></i></div>
+                        <div class="role-name">Bank</div>
+                    </div>
+                    <div class="role-card" onclick="setRole('GOVERNMENT_ADMIN', this)">
+                        <div class="role-icon"><i data-lucide="landmark" size="24"></i></div>
+                        <div class="role-name">Govt</div>
+                    </div>
+                </div>
+
+                <div class="form-section-head">02 Core Credentials</div>
+                <div class="form-grid">
+                    <div>
+                        <label class="form-label">Full Legal Name</label>
+                        <input type="text" id="name" class="form-input" placeholder="E.g. Rajesh Kumar" required>
+                    </div>
+                    <div>
+                        <label class="form-label">Stakeholder Email</label>
+                        <input type="email" id="email" class="form-input" placeholder="name@dept.gov" required>
+                    </div>
+                    <div>
+                        <label class="form-label">Mobile (KYC-Linked)</label>
+                        <input type="text" id="mobile" class="form-input" placeholder="+91 XXXXX XXXXX" required>
+                    </div>
+                    <div>
+                        <label class="form-label">Access Password</label>
+                        <input type="password" id="password" class="form-input" placeholder="••••••••" required>
+                    </div>
+                </div>
+
+                <div id="dynamicFields">
+                    <!-- Loaded via JS -->
+                </div>
+
+                <div class="mt-24 pt-16 border-t border-gray-100">
+                    <button type="submit" id="submitBtn" class="btn-primary w-full !py-8 text-2xl">
+                        Initialize Node <i data-lucide="shield-check" size="24"></i>
+                    </button>
+                    <p class="text-center mt-12 text-[11px] font-black uppercase tracking-widest text-gray-400">
+                        Department Node Active? <a href="login.html" class="text-emerald-600 hover:underline">Secure
+                            Sign
+                            In</a>
+                    </p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="api.js"></script>
+    <script>
+        lucide.createIcons();
+        let selectedRole = 'FARMER';
+
+        function setRole(role, card) {
+            selectedRole = role;
+            document.querySelectorAll('.role-card').forEach(c => c.classList.remove('active'));
+            card.classList.add('active');
+            updateDynamicFields(role);
+        }
+
+        function updateDynamicFields(role) {
+            const container = document.getElementById('dynamicFields');
+            if (role === 'FARMER') {
+                container.innerHTML = `
+                    <div class="form-section-head">03 Farmer Metadata</div>
+                    <div class="form-grid">
+                        <div>
+                            <label class="form-label">Aadhaar (Last 4)</label>
+                            <input type="text" id="aadhaar" class="form-input" placeholder="XXXX" required>
+                        </div>
+                        <div>
+                            <label class="form-label">Land Area (Acres)</label>
+                            <input type="number" step="0.01" id="landArea" class="form-input" placeholder="2.5" required>
+                        </div>
+                        <div>
+                            <label class="form-label">Village</label>
+                            <input type="text" id="village" class="form-input" placeholder="Palakkad Node 01" required>
+                        </div>
+                        <div>
+                            <label class="form-label">Taluk</label>
+                            <input type="text" id="taluk" class="form-input" placeholder="Alathur" required>
+                        </div>
+                    </div>
+                `;
+            } else {
+                let sectionTitle = role.split('_')[0].charAt(0) + role.split('_')[0].slice(1).toLowerCase();
+                container.innerHTML = `
+                    <div class="form-section-head">03 ${sectionTitle} Credentials</div>
+                    <div class="form-grid">
+                        <div>
+                            <label class="form-label">Department Code</label>
+                            <input type="text" id="deptCode" class="form-input" placeholder="DEP-XXXX" required>
+                        </div>
+                        <div>
+                            <label class="form-label">Official ID</label>
+                            <input type="text" id="officialId" class="form-input" placeholder="EMP-2026-001" required>
+                        </div>
+                    </div>
+                `;
+            }
+            lucide.createIcons();
+        }
+
+        // Initialize default
+        updateDynamicFields('FARMER');
+
+        document.getElementById('signupForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            const errorBox = document.getElementById('errorBox');
+
+            const payload = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                mobile: document.getElementById('mobile').value,
+                password: document.getElementById('password').value,
+                role: selectedRole,
+                farmerData: selectedRole === 'FARMER' ? {
+                    aadhaarMasked: document.getElementById('aadhaar').value,
+                    landArea: document.getElementById('landArea').value,
+                    village: document.getElementById('village').value,
+                    taluk: document.getElementById('taluk').value
+                } : null,
+                officerData: selectedRole !== 'FARMER' ? {
+                    departmentCode: document.getElementById('deptCode').value,
+                    officialId: document.getElementById('officialId').value
+                } : null
+            };
+
+            try {
+                btn.disabled = true; btn.innerHTML = 'Synchronizing...';
+                errorBox.style.display = 'none';
+                const data = await apiRequest('/auth/signup', { method: 'POST', body: JSON.stringify(payload) });
+                saveUser(data.token, data);
+                window.location.href = `dashboard-${selectedRole.toLowerCase().split('_')[0]}.html`;
+            } catch (err) {
+                errorBox.textContent = err.message;
+                errorBox.style.display = 'block';
+                btn.disabled = false; btn.innerHTML = 'Initialize Node Account <i data-lucide="shield-check" size="24"></i>';
+                lucide.createIcons();
+            }
+        });
+    </script>
+</body>
+
+</html>

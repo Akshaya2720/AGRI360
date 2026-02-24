@@ -1,0 +1,16 @@
+{
+    "welcome": "Welcome to Agri-Escrow 360",
+    "login": "Login",
+    "signup": "Sign Up",
+    "farmer": "Farmer",
+    "officer": "Officer",
+    "paddy_submission": "Paddy Submission",
+    "dashboard": "Dashboard",
+    "history": "History",
+    "credit_profile": "Credit Profile",
+    "total_msp_earned": "Total MSP Earned",
+    "last_payment_status": "Last Payment Status",
+    "agri_credit_score": "Agri Credit Score",
+    "submit_paddy": "Submit Paddy",
+    "logout": "Logout"
+}

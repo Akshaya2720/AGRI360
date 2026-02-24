@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yield Analytics | Agri-Escrow 360</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body class="mesh-bg flex">
+    <div class="dashboard-layout w-full">
+        <!-- Sidebar -->
+        <aside class="sidebar animate-fade-in">
+            <div class="flex items-center gap-4 mb-20">
+                <div style="background: var(--primary); padding: 0.6rem; border-radius: 16px; color: white;">
+                    <i data-lucide="command" size="28" stroke-width="2.5"></i>
+                </div>
+                <span class="font-display font-black text-3xl tracking-tighter">Agri<span
+                        class="emerald-600">360</span></span>
+            </div>
+
+            <nav style="flex: 1;">
+                <a href="dashboard-supplyco.html" class="nav-item">
+                    <i data-lucide="layout-grid" size="20"></i>
+                    <span data-i18n="nav_dashboard">Hub Center</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i data-lucide="file-check" size="20"></i>
+                    <span data-i18n="nav_harvest">Approval Queue</span>
+                </a>
+                <a href="logistics-node.html" class="nav-item">
+                    <i data-lucide="truck" size="20"></i>
+                    <span data-i18n="nav_logistics">Logistics Hub</span>
+                </a>
+                <a href="yield-analytics-supplyco.html" class="nav-item active">
+                    <i data-lucide="pie-chart" size="20"></i>
+                    <span data-i18n="nav_yield_supplyco">Procurement Analytics</span>
+                </a>
+            </nav>
+
+            <div class="pt-10 border-t border-gray-100">
+                <a href="#" class="nav-item !text-red-500 hover:!bg-red-50" onclick="logout()">
+                    <i data-lucide="log-out" size="20"></i>
+                    <span data-i18n="logout">Terminate session</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content flex flex-col min-h-screen">
+            <header class="flex justify-between items-center mb-20 animate-fade-in">
+                <div>
+                    <h1 class="text-6xl italic font-display leading-[0.8]">
+                        Yield <br>
+                        <span class="emerald-600 NOT-italic uppercase tracking-tighter">Forecasting Hub</span>
+                    </h1>
+                    <p class="text-sm gray-400 font-bold tracking-widest uppercase mt-6">
+                        Predictive Analysis • <span class="emerald-600">AI Node Scanning</span>
+                    </p>
+                </div>
+            </header>
+
+            <!-- Analysis Card -->
+            <div class="card-premium flex-1 mb-20 animate-fade-in-up">
+                <div class="flex flex-col items-center justify-center py-32 text-center">
+                    <div style="background: var(--bg); padding: 3rem; border-radius: 50%; color: var(--primary); margin-bottom: 3rem;"
+                        class="animate-pulse">
+                        <i data-lucide="bar-chart-3" size="64"></i>
+                    </div>
+                    <h3 class="text-4xl font-black italic tracking-tighter">AI Synthesis <span
+                            class="emerald-600">Pending</span></h3>
+                    <p class="text-lg text-gray-500 font-bold max-w-sm mt-6 leading-relaxed">Collecting real-time
+                        submission metrics from district nodes to generate the 2026 Procurement Curve.</p>
+
+                    <div class="mt-16 w-full max-w-xs h-1 bg-gray-100 rounded-full overflow-hidden">
+                        <div class="h-full bg-emerald-600 w-[65%] animate-pulse"></div>
+                    </div>
+                    <p class="text-[10px] font-black gray-400 mt-6 uppercase tracking-widest">Node Synchronization: 65%
+                        Complete</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="api.js"></script>
+    <script src="i18n.js"></script>
+    <script>
+        lucide.createIcons();
+        const user = getUser();
+        if (!user || user.role !== 'SUPPLYCO_OFFICER') window.location.href = 'login.html';
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+
+</html>

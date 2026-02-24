@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agri-Escrow 360</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .full-center {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .logo-wrap {
+            background: var(--primary);
+            padding: 1.5rem;
+            border-radius: 28px;
+            color: white;
+            display: flex;
+            box-shadow: 0 30px 60px -12px rgba(16, 185, 129, 0.35);
+            margin-bottom: 5rem;
+            /* Increased space */
+        }
+
+        .lang-switcher {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            display: flex;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            padding: 0.5rem;
+            border-radius: 100px;
+            border: 1px solid var(--border);
+            z-index: 100;
+        }
+
+        .lang-btn {
+            padding: 0.6rem 1.2rem;
+            border-radius: 100px;
+            font-size: 10px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+        }
+
+        .lang-btn.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+        }
+
+        /* Massive Heading */
+        .massive-heading {
+            font-size: 10rem;
+            /* Even bigger */
+            line-height: 0.9;
+            margin-bottom: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .massive-heading {
+                font-size: 5rem;
+            }
+        }
+    </style>
+</head>
+
+<body class="mesh-bg flex items-center justify-center">
+    <div class="container hero-layout animate-fade-in">
+        <div class="flex flex-col items-center">
+            <div
+                class="bg-white border p-6 rounded-[2.5rem] shadow-lg mb-12 transform hover:scale-105 transition-transform duration-700">
+                <div class="flex items-center gap-5">
+                    <div style="background: var(--primary); padding: 0.8rem; border-radius: 18px; color: white;">
+                        <i data-lucide="sprout" size="44" stroke-width="2.5"></i>
+                    </div>
+                    <span class="font-display font-black text-6xl tracking-tighter">Agri<span
+                            class="emerald-600">360</span></span>
+                </div>
+            </div>
+
+            <h1 class="text-7xl font-display italic mb-10 leading-[0.9]">
+                State <span class="emerald-600 NOT-italic uppercase tracking-tighter">Liquidity</span> <br>
+                Infrastructure.
+            </h1>
+
+            <p class="text-2xl text-gray-500 font-bold tracking-tight max-w-2xl mb-16 leading-relaxed">
+                A full-stack, AI-powered system modernizing Kerala's procurement with real-time escrow settlements and
+                distress forecasting.
+            </p>
+
+            <div class="flex gap-6">
+                <a href="signup.html" class="btn-primary" data-i18n="btn_get_started">Get Started</a>
+                <a href="login.html" class="btn-secondary" data-i18n="signin">Sign In</a>
+            </div>
+        </div>
+
+        <div class="mt-20 flex flex-col items-center">
+            <div class="glass-pill flex items-center gap-2 mb-8 animate-fade-in" style="animation-delay: 0.5s;">
+                <div style="width: 8px; height: 8px; background: #10b981; border-radius: 50%;" class="animate-pulse">
+                </div>
+                <span class="text-[10px] font-black uppercase tracking-widest gray-400">Mainnet Node Active</span>
+            </div>
+
+            <div class="flex gap-16 gray-400">
+                <div class="flex flex-col items-center">
+                    <p class="text-3xl font-black text-slate-800">₹480Cr+</p>
+                    <p class="text-[9px] font-black uppercase tracking-widest mt-1">Escrow Pool</p>
+                </div>
+                <div class="flex flex-col items-center">
+                    <p class="text-3xl font-black text-slate-800">12K+</p>
+                    <p class="text-[9px] font-black uppercase tracking-widest mt-1">Active Nodes</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

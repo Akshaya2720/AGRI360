@@ -1,0 +1,82 @@
+@import "tailwindcss";
+
+@theme {
+  --font-plus: "var(--font-plus-jakarta)", ui-sans-serif, system-ui;
+  --font-outfit: "var(--font-outfit)", ui-sans-serif, system-ui;
+
+  --color-emerald-600: hsl(142 76% 36%);
+  --color-emerald-500: hsl(142 76% 45%);
+  --color-emerald-700: hsl(142 76% 25%);
+
+  --color-amber-500: hsl(38 92% 50%);
+  --color-amber-400: hsl(38 92% 60%);
+}
+
+@layer base {
+  body {
+    background-color: hsl(210 40% 98%);
+    color: hsl(222 47% 11%);
+    font-family: var(--font-plus);
+    -webkit-font-smoothing: antialiased;
+    scroll-behavior: smooth;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  .font-display {
+    font-family: var(--font-outfit);
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply relative overflow-hidden bg-emerald-600 text-white px-8 py-3.5 rounded-2xl font-bold tracking-tight transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_8px_30px_rgba(16, 185, 129, 0.3)] active:scale-95 flex items-center justify-center gap-2;
+  }
+
+  .btn-secondary {
+    @apply border-2 border-gray-200 bg-white/50 backdrop-blur-sm text-gray-900 px-8 py-3.5 rounded-2xl font-bold tracking-tight transition-all duration-300 hover:bg-white hover:border-emerald-600 hover:text-emerald-600 active:scale-95;
+  }
+
+  .card-premium {
+    @apply bg-white border border-gray-100 rounded-3xl p-8 shadow-sm transition-all duration-500 hover:shadow-xl hover:-translate-y-1;
+  }
+
+  .glass-morph {
+    @apply bg-white/60 backdrop-blur-2xl border border-white/20 shadow-2xl;
+  }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-br from-emerald-600 to-emerald-800;
+  }
+}
+
+@layer utilities {
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0% {
+      transform: translateY(0px);
+    }
+
+    50% {
+      transform: translateY(-20px);
+    }
+
+    100% {
+      transform: translateY(0px);
+    }
+  }
+
+  .mesh-bg {
+    background-color: hsl(210 40% 98%);
+    background-image:
+      radial-gradient(at 0% 0%, hsla(142, 76%, 36%, 0.1) 0px, transparent 50%),
+      radial-gradient(at 100% 0%, hsla(38, 92%, 50%, 0.1) 0px, transparent 50%),
+      radial-gradient(at 100% 100%, hsla(199, 89%, 48%, 0.1) 0px, transparent 50%),
+      radial-gradient(at 0% 100%, hsla(142, 76%, 36%, 0.1) 0px, transparent 50%);
+  }
+}

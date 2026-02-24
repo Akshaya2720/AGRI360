@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In | Agri-Escrow 360</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .login-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            min-height: 100vh;
+        }
+
+        @media (min-width: 1024px) {
+            .login-layout {
+                grid-template-columns: 1.1fr 0.9fr;
+            }
+        }
+
+        .form-group {
+            margin-bottom: 2.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 10px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--primary);
+            margin-bottom: 12px;
+            margin-left: 4px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 1.25rem 1.75rem;
+            background: rgba(15, 23, 42, 0.03);
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: white;
+            box-shadow: 0 0 0 5px rgba(16, 185, 129, 0.08);
+        }
+
+        .error-message {
+            background: #fef2f2;
+            border: 1px solid #fee2e2;
+            color: #ef4444;
+            padding: 1.25rem;
+            border-radius: 18px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 2.5rem;
+            display: none;
+        }
+    </style>
+</head>
+
+<body class="mesh-bg flex items-center justify-center py-32">
+    <div class="container max-w-lg animate-fade-in">
+        <div class="text-center mb-16">
+            <a href="index.html" class="inline-flex items-center gap-4 mb-12"
+                style="text-decoration: none; color: inherit;">
+                <div style="background: var(--primary); padding: 0.8rem; border-radius: 18px; color: white;">
+                    <i data-lucide="sprout" size="32" stroke-width="2.5"></i>
+                </div>
+                <span class="font-display font-black text-4xl tracking-tighter">Agri<span
+                        class="emerald-600">360</span></span>
+            </a>
+            <h1 class="text-6xl italic font-display mb-6">Secure <span class="emerald-600 NOT-italic">Access.</span>
+            </h1>
+            <p class="text-lg text-gray-500 font-bold tracking-tight">Enter your departmental credentials to access the
+                state node.</p>
+        </div>
+
+        <div class="card-premium glass-morph">
+            <div id="errorBox" class="error-message"
+                style="background: #fff1f2; color: #e11d48; padding: 1.5rem; border-radius: 20px; font-weight: 800; font-size: 0.85rem; margin-bottom: 3rem; display: none; border: 1px solid #ffe4e6;">
+            </div>
+
+            <form id="loginForm" class="space-y-10">
+                <div class="form-group">
+                    <label class="form-label">Stakeholder Email</label>
+                    <input type="email" id="email" class="form-input" placeholder="name@dept.gov" required>
+                </div>
+
+                <div class="form-group">
+                    <div class="flex justify-between items-center mb-4">
+                        <label class="form-label">Security Password</label>
+                        <a href="#"
+                            class="text-[10px] font-black text-emerald-600 uppercase tracking-widest">Recovery?</a>
+                    </div>
+                    <input type="password" id="password" class="form-input" placeholder="••••••••" required>
+                </div>
+
+                <div class="pt-10">
+                    <button type="submit" id="submitBtn" class="btn-primary w-full !py-7 text-2xl">
+                        Validate Agency <i data-lucide="shield-check" size="24"></i>
+                    </button>
+                    <p class="text-center mt-12 text-[11px] font-black uppercase tracking-widest text-gray-400">
+                        New Department? <a href="signup.html" class="text-emerald-600 hover:underline">Apply for
+                            Node</a>
+                    </p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="api.js"></script>
+    <script>
+        lucide.createIcons();
+
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorBox = document.getElementById('errorBox');
+            const submitBtn = document.getElementById('submitBtn');
+
+            try {
+                errorBox.style.display = 'none';
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = 'Validating Node...';
+
+                const data = await apiRequest('/auth/login', {
+                    method: 'POST',
+                    body: JSON.stringify({ email, password })
+                });
+
+                saveUser(data.token, data);
+                const role = data.role.toLowerCase().split('_')[0];
+                window.location.href = `dashboard-${role}.html`;
+
+            } catch (err) {
+                errorBox.textContent = err.message;
+                errorBox.style.display = 'block';
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Validate Agency <i data-lucide="shield-check" size="24"></i>';
+                lucide.createIcons();
+            }
+        });
+    </script>
+</body>
+
+</html>

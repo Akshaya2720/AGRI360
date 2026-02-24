@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Govt Control | Agri-Escrow 360</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+</head>
+
+<body class="mesh-bg flex">
+    <div class="dashboard-layout w-full">
+        <!-- Sidebar -->
+        <aside class="sidebar animate-fade-in">
+            <div class="flex items-center gap-4 mb-20">
+                <div style="background: var(--primary); padding: 0.6rem; border-radius: 16px; color: white;">
+                    <i data-lucide="shield-check" size="28" stroke-width="2.5"></i>
+                </div>
+                <span class="font-display font-black text-3xl tracking-tighter">Agri<span
+                        class="emerald-600">360</span></span>
+            </div>
+
+            <nav style="flex: 1;">
+                <a href="dashboard-government.html" class="nav-item active">
+                    <i data-lucide="landmark" size="20"></i>
+                    <span data-i18n="nav_dashboard">Policy Sim</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i data-lucide="bar-chart-3" size="20"></i>
+                    <span data-i18n="nav_harvest">State Analytics</span>
+                </a>
+            </nav>
+
+            <div class="pt-10 border-t border-gray-100">
+                <div class="flex items-center gap-4 mb-8 grayscale hover:grayscale-0 transition-all duration-500">
+                    <div
+                        style="width: 48px; height: 48px; border-radius: 16px; background: var(--bg); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center;">
+                        <i data-lucide="user-check" size="24" class="gray-400"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm font-black tracking-tight" id="sidebarUserName">Govt Admin</p>
+                        <p class="text-[9px] font-black uppercase tracking-widest emerald-600">State Node Delta</p>
+                    </div>
+                </div>
+                <a href="#" class="nav-item !text-red-500 hover:!bg-red-50" onclick="logout()">
+                    <i data-lucide="log-out" size="20"></i>
+                    <span data-i18n="logout">Terminate session</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content flex flex-col min-h-screen">
+            <header class="flex justify-between items-center mb-20 animate-fade-in">
+                <div>
+                    <h1 class="text-6xl italic font-display leading-[0.8]">
+                        State <br>
+                        <span class="emerald-600 NOT-italic uppercase tracking-tighter">Policy Dashboard</span>
+                    </h1>
+                    <p class="text-sm gray-400 font-bold tracking-widest uppercase mt-6">
+                        Governance Oversight • <span class="emerald-600 animate-pulse">Node Secure</span>
+                    </p>
+                </div>
+            </header>
+
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-3 gap-12 mb-20">
+                <div class="card-premium">
+                    <p class="text-[10px] font-black uppercase tracking-widest gray-400 mb-2">MSP Liquidity Pool</p>
+                    <h3 class="text-5xl font-black italic tracking-tighter">₹240<span
+                            class="text-xl gray-400 NOT-italic font-bold">Cr</span></h3>
+                    <div
+                        class="mt-8 pt-6 border-t border-gray-100 flex items-center gap-2 text-emerald-600 font-bold text-xs">
+                        <i data-lucide="check-circle" size="14"></i> Reserve Threshold Maintained
+                    </div>
+                </div>
+
+                <div class="card-premium">
+                    <p class="text-[10px] font-black uppercase tracking-widest gray-400 mb-2">Citizen Impact</p>
+                    <h3 class="text-5xl font-black italic tracking-tighter">424k<span
+                            class="text-xl gray-400 NOT-italic font-bold">Users</span></h3>
+                    <div
+                        class="mt-8 pt-6 border-t border-gray-100 flex items-center gap-2 text-emerald-600 font-bold text-xs">
+                        <i data-lucide="users" size="14"></i> 12% growth this Q
+                    </div>
+                </div>
+
+                <div class="card-premium">
+                    <p class="text-[10px] font-black uppercase tracking-widest gray-400 mb-2">Network Stability</p>
+                    <h3 class="text-5xl font-black italic tracking-tighter">99.9<span
+                            class="text-xl gray-400 NOT-italic font-bold">%</span></h3>
+                    <div
+                        class="mt-8 pt-6 border-t border-gray-100 flex items-center gap-2 text-emerald-600 font-bold text-xs">
+                        <i data-lucide="shield" size="14"></i> Enterprise Grade Node
+                    </div>
+                </div>
+            </div>
+
+            <!-- Policy Map -->
+            <div class="grid grid-cols-2 gap-12 mb-20">
+                <div class="card-premium flex flex-col h-[600px]">
+                    <div class="flex justify-between items-center mb-8">
+                        <h2 class="text-2xl font-black italic tracking-tight">Yield <span class="emerald-600">Density
+                                Heatmap</span></h2>
+                    </div>
+                    <div id="yieldMap" class="flex-1 rounded-[2rem] bg-gray-50 border border-gray-100 overflow-hidden">
+                    </div>
+                </div>
+
+                <div class="card-premium flex flex-col">
+                    <div class="flex justify-between items-center mb-12">
+                        <h2 class="text-2xl font-black italic tracking-tight">Policy <span
+                                class="emerald-600">Simulation</span></h2>
+                    </div>
+                    <div class="space-y-12">
+                        <div>
+                            <div class="flex justify-between mb-4">
+                                <label class="text-[10px] font-black uppercase tracking-widest gray-400">Proposed MSP
+                                    Rate (₹/KG)</label>
+                                <span class="text-lg font-black italic" id="mspVal">28.20</span>
+                            </div>
+                            <input type="range" min="20" max="40" step="0.5" value="28.2"
+                                class="w-full h-1 bg-gray-100 rounded-lg appearance-none cursor-pointer accent-emerald-600"
+                                id="mspRange">
+                        </div>
+
+                        <div class="p-10 bg-emerald-50 rounded-[2.5rem] border border-emerald-100">
+                            <p class="text-[10px] font-black uppercase tracking-widest text-emerald-600 mb-6 font-bold">
+                                Simulated Outcome</p>
+                            <div class="space-y-6">
+                                <div class="flex justify-between items-end">
+                                    <span class="text-sm font-bold text-slate-900">Est. Total Payout</span>
+                                    <span class="text-2xl font-black italic text-emerald-700">₹84.22 Cr</span>
+                                </div>
+                                <div class="flex justify-between items-end">
+                                    <span class="text-sm font-bold text-slate-900">Farmer Satisfaction Index</span>
+                                    <span class="text-2xl font-black italic text-emerald-700">84%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="btn-primary w-full !py-6">Implement State Policy</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="api.js"></script>
+    <script src="i18n.js"></script>
+    <script>
+        lucide.createIcons();
+        const user = getUser();
+        if (!user || user.role !== 'GOVERNMENT_ADMIN') window.location.href = 'login.html';
+
+        // Initialize Map
+        const map = L.map('yieldMap', { zoomControl: false }).setView([10.8505, 76.2711], 8);
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png').addTo(map);
+
+        const mspRange = document.getElementById('mspRange');
+        const mspVal = document.getElementById('mspVal');
+        mspRange.addEventListener('input', (e) => {
+            mspVal.textContent = parseFloat(e.target.value).toFixed(2);
+        });
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+
+</html>

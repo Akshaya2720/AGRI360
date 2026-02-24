@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logistics Node | Agri-Escrow 360</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body class="mesh-bg flex">
+    <div class="dashboard-layout w-full">
+        <!-- Sidebar -->
+        <aside class="sidebar animate-fade-in">
+            <div class="flex items-center gap-4 mb-20">
+                <div style="background: var(--primary); padding: 0.6rem; border-radius: 16px; color: white;">
+                    <i data-lucide="command" size="28" stroke-width="2.5"></i>
+                </div>
+                <span class="font-display font-black text-3xl tracking-tighter">Agri<span
+                        class="emerald-600">360</span></span>
+            </div>
+
+            <nav style="flex: 1;">
+                <a href="dashboard-supplyco.html" class="nav-item">
+                    <i data-lucide="layout-grid" size="20"></i>
+                    <span data-i18n="nav_dashboard">Hub Center</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i data-lucide="file-check" size="20"></i>
+                    <span data-i18n="nav_harvest">Approval Queue</span>
+                </a>
+                <a href="logistics-node.html" class="nav-item active">
+                    <i data-lucide="truck" size="20"></i>
+                    <span data-i18n="nav_logistics">Logistics Hub</span>
+                </a>
+                <a href="yield-analytics-supplyco.html" class="nav-item">
+                    <i data-lucide="pie-chart" size="20"></i>
+                    <span data-i18n="nav_yield_supplyco">Procurement Analytics</span>
+                </a>
+            </nav>
+
+            <div class="pt-10 border-t border-gray-100">
+                <a href="#" class="nav-item !text-red-500 hover:!bg-red-50" onclick="logout()">
+                    <i data-lucide="log-out" size="20"></i>
+                    <span data-i18n="logout">Terminate session</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content flex flex-col min-h-screen">
+            <header class="flex justify-between items-center mb-20 animate-fade-in">
+                <div>
+                    <h1 class="text-6xl italic font-display leading-[0.8]">
+                        Logistics <br>
+                        <span class="emerald-600 NOT-italic uppercase tracking-tighter">Fleet Node</span>
+                    </h1>
+                    <p class="text-sm gray-400 font-bold tracking-widest uppercase mt-6">
+                        Procurement Transport • <span class="emerald-600">Sync Active</span>
+                    </p>
+                </div>
+            </header>
+
+            <!-- Fleet Grid -->
+            <div class="grid grid-cols-2 gap-12 mb-20 animate-fade-in-up">
+                <div class="card-premium group hover:border-emerald-200 transition-all duration-500">
+                    <div class="flex justify-between items-start mb-8">
+                        <div style="background: #eff6ff; padding: 1.25rem; border-radius: 20px; color: #2563eb;"
+                            class="group-hover:scale-110 transition-transform">
+                            <i data-lucide="truck" size="28"></i>
+                        </div>
+                        <div class="tag tag-success">Active</div>
+                    </div>
+                    <h4 class="text-2xl font-black italic tracking-tighter">VEC-KL-8291</h4>
+                    <p class="text-[10px] font-black gray-400 uppercase tracking-widest mt-2">Palakkad Transp. Hub Node
+                    </p>
+                    <div class="mt-10 pt-8 border-t border-gray-50">
+                        <div class="flex justify-between items-end">
+                            <div>
+                                <p class="text-[9px] font-black gray-400 uppercase tracking-widest mb-1">Current Load
+                                </p>
+                                <p class="text-lg font-black text-slate-800">4,200 KG • Matta Elite</p>
+                            </div>
+                            <i data-lucide="arrow-right" size="20" class="emerald-600"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-premium group hover:border-amber-200 transition-all duration-500">
+                    <div class="flex justify-between items-start mb-8">
+                        <div style="background: #fffbeb; padding: 1.25rem; border-radius: 20px; color: #d97706;"
+                            class="group-hover:scale-110 transition-transform">
+                            <i data-lucide="clock" size="28"></i>
+                        </div>
+                        <div class="tag tag-warning">In Transit</div>
+                    </div>
+                    <h4 class="text-2xl font-black italic tracking-tighter">VEC-KL-1102</h4>
+                    <p class="text-[10px] font-black gray-400 uppercase tracking-widest mt-2">Thrissur Mill Terminal
+                        Node</p>
+                    <div class="mt-10 pt-8 border-t border-gray-50">
+                        <div class="flex justify-between items-end">
+                            <div>
+                                <p class="text-[9px] font-black gray-400 uppercase tracking-widest mb-1">ETA Terminal
+                                </p>
+                                <p class="text-lg font-black text-slate-800">14:30 IST Today</p>
+                            </div>
+                            <i data-lucide="map-pin" size="20" class="amber-500"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="api.js"></script>
+    <script src="i18n.js"></script>
+    <script>
+        lucide.createIcons();
+        const user = getUser();
+        if (!user || user.role !== 'SUPPLYCO_OFFICER') window.location.href = 'login.html';
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+
+</html>

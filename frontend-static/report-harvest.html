@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report Harvest | Agri-Escrow 360</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .step-hidden {
+            display: none;
+        }
+
+        .step-pill {
+            flex: 1;
+            height: 6px;
+            background: var(--border);
+            border-radius: 10px;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .step-pill.active {
+            background: var(--primary);
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .ai-anomaly-box {
+            background: var(--emerald-50);
+            border: 1px solid var(--emerald-100);
+            padding: 1.5rem;
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+    </style>
+</head>
+
+<body class="mesh-bg flex">
+    <div class="dashboard-layout w-full">
+        <!-- Sidebar -->
+        <aside class="sidebar animate-fade-in">
+            <div class="flex items-center gap-4 mb-20">
+                <div style="background: var(--primary); padding: 0.6rem; border-radius: 16px; color: white;">
+                    <i data-lucide="sprout" size="28" stroke-width="2.5"></i>
+                </div>
+                <span class="font-display font-black text-3xl tracking-tighter">Agri<span
+                        class="emerald-600">360</span></span>
+            </div>
+
+            <nav style="flex: 1;">
+                <a href="dashboard-farmer.html" class="nav-item">
+                    <i data-lucide="layout-dashboard" size="20"></i>
+                    <span data-i18n="nav_dashboard">Workspace</span>
+                </a>
+                <a href="harvest-logs.html" class="nav-item">
+                    <i data-lucide="package" size="20"></i>
+                    <span data-i18n="nav_harvest">Harvest Nodes</span>
+                </a>
+                <a href="payout-history.html" class="nav-item">
+                    <i data-lucide="credit-card" size="20"></i>
+                    <span data-i18n="nav_payout">Payout History</span>
+                </a>
+                <a href="regional-yield.html" class="nav-item">
+                    <i data-lucide="map" size="20"></i>
+                    <span data-i18n="nav_analytics">Yield Map</span>
+                </a>
+            </nav>
+
+            <div class="pt-10 border-t border-gray-100">
+                <a href="#" class="nav-item !text-red-500 hover:!bg-red-50" onclick="logout()">
+                    <i data-lucide="log-out" size="20"></i>
+                    <span data-i18n="logout">Terminate session</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content flex flex-col min-h-screen">
+            <header class="flex justify-between items-center mb-20 animate-fade-in">
+                <div>
+                    <h1 class="text-6xl italic font-display leading-[0.8]">
+                        Report <br>
+                        <span class="emerald-600 NOT-italic uppercase tracking-tighter">Harvest Node</span>
+                    </h1>
+                    <p class="text-sm gray-400 font-bold tracking-widest uppercase mt-6">
+                        Procurement Wizard • <span class="emerald-600">Secure Entry</span>
+                    </p>
+                </div>
+
+                <a href="dashboard-farmer.html"
+                    class="glass-pill flex items-center gap-3 hover:scale-105 transition-transform"
+                    style="text-decoration: none; color: inherit;">
+                    <i data-lucide="arrow-left" size="16"></i>
+                    <span class="text-[9px] font-black uppercase tracking-widest">Abandon Node</span>
+                </a>
+            </header>
+
+            <!-- Wizard Steps -->
+            <div class="flex gap-4 mb-16">
+                <div class="step-pill active" id="dot1"></div>
+                <div class="step-pill" id="dot2"></div>
+                <div class="step-pill" id="dot3"></div>
+            </div>
+
+            <!-- Form Container -->
+            <div class="card-premium flex-1 mb-20 animate-fade-in-up">
+                <form id="submissionForm" class="max-w-2xl mx-auto py-12">
+                    <!-- Step 1 -->
+                    <div id="step1" class="space-y-12">
+                        <div class="space-y-10">
+                            <div>
+                                <label
+                                    class="text-[10px] font-black uppercase tracking-widest gray-400 mb-4 block">Select
+                                    Crop Node</label>
+                                <select id="cropType"
+                                    class="w-full bg-gray-50 border border-gray-100 p-6 rounded-[2rem] font-black text-xl italic appearance-none focus:bg-white transition-all outline-none">
+                                    <option value="Matta" data-price="28.2">Matta Elite (₹28.20/kg)</option>
+                                    <option value="Jaya" data-price="26.5">Jaya Standard (₹26.50/kg)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label
+                                    class="text-[10px] font-black uppercase tracking-widest gray-400 mb-4 block">Yield
+                                    Quantity (KG)</label>
+                                <input type="number" id="quantity"
+                                    class="w-full bg-gray-50 border border-gray-100 p-6 rounded-[2rem] font-black text-4xl italic focus:bg-white transition-all outline-none"
+                                    placeholder="0000" required oninput="calcPayout()">
+                            </div>
+                        </div>
+
+                        <div class="p-12 bg-emerald-50 rounded-[3rem] border border-emerald-100 text-center">
+                            <p class="text-[11px] font-black uppercase tracking-widest text-emerald-600 mb-4 font-bold">
+                                Projected Escrow Payout</p>
+                            <h3 class="text-6xl font-black italic tracking-tighter text-emerald-700">₹<span
+                                    id="payoutCalc">0</span></h3>
+                        </div>
+
+                        <button type="button" class="btn-primary w-full !py-8 !text-xl" onclick="nextStep(2)">Proceed to
+                            Quality Node</button>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div id="step2" class="step-hidden space-y-12">
+                        <div class="grid grid-cols-2 gap-8">
+                            <div>
+                                <label
+                                    class="text-[10px] font-black uppercase tracking-widest gray-400 mb-4 block">Moisture
+                                    %</label>
+                                <input type="number" step="0.1" id="moisture"
+                                    class="w-full bg-gray-50 border border-gray-100 p-6 rounded-[2rem] font-black text-2xl italic focus:bg-white transition-all outline-none"
+                                    placeholder="13.5" required>
+                            </div>
+                            <div>
+                                <label
+                                    class="text-[10px] font-black uppercase tracking-widest gray-400 mb-4 block">Harvest
+                                    Date</label>
+                                <input type="date" id="harvestDate"
+                                    class="w-full bg-gray-50 border border-gray-100 p-6 rounded-[2rem] font-black text-sm uppercase focus:bg-white transition-all outline-none"
+                                    required>
+                            </div>
+                        </div>
+
+                        <div class="ai-anomaly-box">
+                            <i data-lucide="cpu" class="emerald-600" size="24"></i>
+                            <p class="text-xs font-bold text-slate-800">AI Anomaly Guard: <span
+                                    class="emerald-600">Monitoring quality vectors.</span></p>
+                        </div>
+
+                        <div class="flex gap-6">
+                            <button type="button" class="btn-secondary flex-1 !py-6" onclick="nextStep(1)">Back</button>
+                            <button type="button" class="btn-primary flex-1 !py-6"
+                                onclick="nextStep(3)">Verification</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div id="step3" class="step-hidden space-y-12">
+                        <div class="flex flex-col items-center text-center py-12">
+                            <div style="background: var(--emerald-50); padding: 2.5rem; border-radius: 50%; color: var(--primary); margin-bottom: 3rem;"
+                                class="animate-bounce">
+                                <i data-lucide="shield-check" size="64"></i>
+                            </div>
+                            <h3 class="text-4xl font-black italic tracking-tighter">Ready for <span
+                                    class="emerald-600">Escrow Trigger</span></h3>
+                            <p class="text-gray-500 font-bold max-w-sm mt-6 leading-relaxed">Verification successful. By
+                                triggering, you authorize the cross-node liquidity settlement.</p>
+                        </div>
+
+                        <div class="flex gap-6">
+                            <button type="button" class="btn-secondary flex-1 !py-6" onclick="nextStep(2)">Back</button>
+                            <button type="submit" id="submitBtn" class="btn-primary flex-1 !py-6">Authorize & Trigger
+                                Sync</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <script src="api.js"></script>
+    <script src="i18n.js"></script>
+    <script>
+        lucide.createIcons();
+        const user = getUser();
+        if (!user || user.role !== 'FARMER') window.location.href = 'login.html';
+
+        function nextStep(s) {
+            document.querySelectorAll('#submissionForm > div').forEach(d => d.classList.add('step-hidden'));
+            document.getElementById(`step${s}`).classList.remove('step-hidden');
+            document.querySelectorAll('.step-pill').forEach((d, i) => {
+                d.classList.toggle('active', i < s);
+            });
+            lucide.createIcons();
+        }
+
+        function calcPayout() {
+            const qty = document.getElementById('quantity').value || 0;
+            const price = document.getElementById('cropType').selectedOptions[0].dataset.price;
+            document.getElementById('payoutCalc').textContent = (qty * price).toLocaleString();
+        }
+
+        document.getElementById('submissionForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            const payload = {
+                cropType: document.getElementById('cropType').value,
+                quantityKg: document.getElementById('quantity').value,
+                moisture: document.getElementById('moisture').value,
+                harvestDate: document.getElementById('harvestDate').value,
+                latitude: 10.7867, longitude: 76.6547
+            };
+
+            try {
+                btn.disabled = true; btn.innerHTML = 'Synchronizing Node...';
+                await apiRequest('/farmer/submit', { method: 'POST', body: JSON.stringify(payload) });
+                window.location.href = 'dashboard-farmer.html';
+            } catch (err) { alert(err.message); btn.disabled = false; btn.innerHTML = 'Authorize & Trigger Sync'; }
+        });
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+
+</html>

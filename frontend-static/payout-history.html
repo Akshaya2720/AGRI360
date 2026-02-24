@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payout History | Agri-Escrow 360</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body class="mesh-bg flex">
+    <div class="dashboard-layout w-full">
+        <!-- Sidebar -->
+        <aside class="sidebar animate-fade-in">
+            <div class="flex items-center gap-4 mb-20">
+                <div style="background: var(--primary); padding: 0.6rem; border-radius: 16px; color: white;">
+                    <i data-lucide="sprout" size="28" stroke-width="2.5"></i>
+                </div>
+                <span class="font-display font-black text-3xl tracking-tighter">Agri<span
+                        class="emerald-600">360</span></span>
+            </div>
+
+            <nav style="flex: 1;">
+                <a href="dashboard-farmer.html" class="nav-item">
+                    <i data-lucide="layout-dashboard" size="20"></i>
+                    <span data-i18n="nav_dashboard">Workspace</span>
+                </a>
+                <a href="harvest-logs.html" class="nav-item">
+                    <i data-lucide="package" size="20"></i>
+                    <span data-i18n="nav_harvest">Harvest Nodes</span>
+                </a>
+                <a href="payout-history.html" class="nav-item active">
+                    <i data-lucide="credit-card" size="20"></i>
+                    <span data-i18n="nav_payout">Payout History</span>
+                </a>
+                <a href="regional-yield.html" class="nav-item">
+                    <i data-lucide="map" size="20"></i>
+                    <span data-i18n="nav_analytics">Yield Map</span>
+                </a>
+            </nav>
+
+            <div class="pt-10 border-t border-gray-100">
+                <a href="#" class="nav-item !text-red-500 hover:!bg-red-50" onclick="logout()">
+                    <i data-lucide="log-out" size="20"></i>
+                    <span data-i18n="logout">Terminate session</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content flex flex-col min-h-screen">
+            <header class="flex justify-between items-center mb-20 animate-fade-in">
+                <div>
+                    <h1 class="text-6xl italic font-display leading-[0.8]">
+                        Fintech <br>
+                        <span class="emerald-600 NOT-italic uppercase tracking-tighter">Settlement Ledger</span>
+                    </h1>
+                    <p class="text-sm gray-400 font-bold tracking-widest uppercase mt-6">
+                        Verified Payouts • <span class="emerald-600">Escrow Sync Active</span>
+                    </p>
+                </div>
+            </header>
+
+            <!-- Payouts List -->
+            <div class="card-premium flex-1 mb-20 animate-fade-in-up">
+                <div class="flex justify-between items-center mb-12">
+                    <h2 class="text-3xl font-black italic tracking-tight">Financial <span
+                            class="emerald-600">Disbursements</span></h2>
+                    <div class="flex gap-4">
+                        <button class="bg-gray-50 border p-3 rounded-xl"><i data-lucide="receipt" size="18"
+                                class="gray-400"></i></button>
+                    </div>
+                </div>
+
+                <div id="payoutList" class="space-y-4">
+                    <div class="flex flex-col items-center justify-center p-20 text-center">
+                        <i data-lucide="loader-2" class="animate-spin emerald-600 mb-4" size="32"></i>
+                        <p class="gray-400 italic font-bold">Synchronizing financial node...</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="api.js"></script>
+    <script src="i18n.js"></script>
+    <script>
+        lucide.createIcons();
+        const user = getUser();
+        if (!user || user.role !== 'FARMER') window.location.href = 'login.html';
+
+        async function loadPayouts() {
+            try {
+                const submissions = await apiRequest('/farmer/history');
+                const container = document.getElementById('payoutList');
+                const settled = submissions.filter(s => s.status === 'SETTLED');
+
+                if (settled.length === 0) {
+                    container.innerHTML = `
+                        <div class="flex flex-col items-center justify-center p-20 text-center border border-dashed border-gray-200 rounded-[3rem]">
+                            <p class="gray-400 italic font-bold">No escrow settlements discovered on this node.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = settled.map(log => `
+                    <div class="flex items-center justify-between p-8 bg-white border border-gray-100 rounded-[2.5rem] hover:shadow-lg transition-all duration-500 group">
+                        <div class="flex items-center gap-6">
+                            <div style="background: var(--emerald-50); padding: 1.25rem; border-radius: 20px; color: var(--primary);" class="group-hover:scale-110 transition-transform">
+                                <i data-lucide="arrow-down-left" size="24"></i>
+                            </div>
+                            <div>
+                                <p class="text-lg font-black tracking-tight">Settlement #TX-${log.id.toString().slice(-4).toUpperCase()}</p>
+                                <p class="text-[10px] font-black gray-400 uppercase tracking-widest mt-1">${log.cropType} Node • ${log.quantityKg} KG Net • Verified</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-[9px] font-black gray-400 uppercase tracking-widest mb-1">Escrow Credit</p>
+                            <p class="text-3xl font-black emerald-600">+₹${(log.quantityKg * 28.2).toLocaleString()}</p>
+                        </div>
+                    </div>
+                `).join('');
+                lucide.createIcons();
+            } catch (err) { console.error(err); }
+        }
+        loadPayouts();
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,14 @@
+{
+    "name": "agri-escrow-360",
+    "version": "1.0.0",
+    "private": true,
+    "workspaces": [
+        "frontend",
+        "backend"
+    ],
+    "scripts": {
+        "dev:frontend": "cd frontend && npm run dev",
+        "dev:backend": "cd backend && npm run dev",
+        "dev:ai": "cd ai-service && .\\venv\\Scripts\\activate && python main.py"
+    }
+}

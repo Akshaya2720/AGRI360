@@ -1,0 +1,136 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+enum Role {
+  FARMER
+  SUPPLYCO_OFFICER
+  MILL_OPERATOR
+  GOVERNMENT_ADMIN
+  BANK_OFFICER
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  mobile    String   @unique
+  password  String
+  name      String
+  role      Role
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  farmer    Farmer?
+  officer   Officer?
+  auditLogs AuditLog[]
+}
+
+model Farmer {
+  id              String   @id @default(uuid())
+  userId          String   @unique
+  user            User     @relation(fields: [userId], references: [id])
+  aadhaarMasked   String
+  landArea        Float
+  village         String
+  taluk           String
+  bankAccount     String
+  upiId           String?
+  creditScore     Int      @default(0)
+  paddySubmissions PaddySubmission[]
+  distressScore   DistressScore?
+}
+
+model Officer {
+  id             String @id @default(uuid())
+  userId         String @unique
+  user           User   @relation(fields: [userId], references: [id])
+  departmentCode String
+  officialId     String
+}
+
+model PaddySubmission {
+  id             String   @id @default(uuid())
+  farmerId       String
+  farmer         Farmer   @relation(fields: [farmerId], references: [id])
+  cropType       String
+  quantityKg     Float
+  moisture       Float
+  harvestDate    DateTime
+  imageUrl       String?
+  latitude       Float?
+  longitude      Float?
+  status         SubmissionStatus @default(PENDING)
+  riskScore      Float?
+  payoutEstimate Float?
+  createdAt      DateTime @default(now())
+  
+  qualityReport  QualityReport?
+  transaction    EscrowTransaction?
+}
+
+enum SubmissionStatus {
+  PENDING
+  APPROVED
+  MILL_VERIFIED
+  ESCROW_TRIGGERED
+  SETTLED
+  REJECTED
+}
+
+model QualityReport {
+  id               String   @id @default(uuid())
+  submissionId     String   @unique
+  submission       PaddySubmission @relation(fields: [submissionId], references: [id])
+  moistureVerified Float
+  grade            String
+  qualityPhoto     String?
+  millOperatorId   String
+  createdAt        DateTime @default(now())
+}
+
+model EscrowTransaction {
+  id            String   @id @default(uuid())
+  submissionId  String   @unique
+  submission    PaddySubmission @relation(fields: [submissionId], references: [id])
+  amount        Float
+  transactionId String   @unique
+  status        String   @default("COMPLETED")
+  createdAt     DateTime @default(now())
+}
+
+model GovernmentSettlement {
+  id        String   @id @default(uuid())
+  amount    Float
+  status    String
+  createdAt DateTime @default(now())
+}
+
+model FraudFlag {
+  id           String   @id @default(uuid())
+  submissionId String
+  reason       String
+  severity     String
+  createdAt    DateTime @default(now())
+}
+
+model DistressScore {
+  id        String   @id @default(uuid())
+  farmerId  String   @unique
+  farmer    Farmer   @relation(fields: [farmerId], references: [id])
+  score     Int
+  updatedAt DateTime @updatedAt
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  action    String
+  metadata  Json?
+  createdAt DateTime @default(now())
+}
